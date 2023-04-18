@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+        background-color: black;
+        }
+        #square {
+            height: 516px; 
+            width:516px;
+            border: 3px white solid;
+            align-items: center;
+            padding: 0px;
+            justify-content: right;
+        }
+        .letter{
+            font-size:30px;
+            color: white;
+        }
+        .row {
+            display: flex;
+        }
+        .boxes{
+            font-size: 140px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            display: block;
+            height: 170px;
+            width: 170px;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        nav h1{
+            color: white;
+            padding: 10px;        
+        }
+        a {
+            color: wheat;
+            font-weight:bold;
+            text-decoration: none;
+            font-size: 20px;
+            margin:0 auto;
+            margin-left: 2em;
+            
+        }
+        nav {
+            
+            border: 1px solid white;
+            justify-content: space-between;
+            padding: 0.4em;
+            background-color: #727272 ;
+            display: flex;
+            align-items:center;
+            display: flex;
+            list-style: none;
+        }
+        ul {
+            display: flex;
+        }
+        nav ul li {
+            list-style: none;
+        }   
+        .active {
+            border: 2px white solid;
+            border-radius: .5em;
+            padding: 5px;
+        }
+            
+    </style>
+   
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+ 
+    <title>Tic-tac-toe vs computer</title>
+</head>
+<body>
+    <nav>
+        <h1>Play against the computer </h1>
+        <ul>
+        <li><a class="active" href="/">Play against the computer </a></li>
+        <li><a href="/1vs1">1 vs 1</a></li></ul>
+    </nav>
+<h1 id="turn" class="letter"></h1>
+<h2 id="SubTitle" class="letter"></h2>
+
+
+ <div id="square">
+<div class="row">
+<div class="boxes" id="c1"></div>
+<div class="boxes" id="c2"></div>
+<div class="boxes" id="c3"></div>
+</div>
+
+<div class="row">
+<div class="boxes" id="c4"></div>
+<div class="boxes" id="c5"></div>
+<div class="boxes" id="c6"></div></div>
+
+<div class="row">
+<div class="boxes" id="c7"></div>
+<div class="boxes" id="c8"></div>
+<div class="boxes" id="c9"></div></div>
+
+</div>
+
+<script>
+    
+
+const c1= document.getElementById('c1')
+const c2= document.getElementById('c2')
+const c3= document.getElementById('c3')
+const c4= document.getElementById('c4')
+const c5= document.getElementById('c5')
+const c6= document.getElementById('c6')
+const c7= document.getElementById('c7')
+const c8= document.getElementById('c8')
+const c9= document.getElementById('c9')
+
+const turn = document.getElementById('turn')
+const SubTitle = document.getElementById('SubTitle')
+const square = document.getElementById('square')
+
+//Datos
+let BoxesList = [c1,c2,c3,c4,c5,c6,c7,c8,c9]
+var CJ
+let SomeoneWon=false
+const CT = "Computer's turn"
+const PT = "Player's turn"
+let Threat = false
+//                               ------------
+//                               | FUNCIONES |
+//                               ------------
+
+function Winner (){
+    
+    const line1 =c1.textContent+c2.textContent+c3.textContent
+    const line2 =c4.textContent+c5.textContent+c6.textContent
+    const line3 =c7.textContent+c8.textContent+c9.textContent
+
+    const line4 =c1.textContent+c4.textContent+c7.textContent
+    const line5 =c2.textContent+c5.textContent+c8.textContent
+    const line6 =c3.textContent+c6.textContent+c9.textContent
+
+    const line7 =c1.textContent+c5.textContent+c9.textContent
+    const line8 =c3.textContent+c5.textContent+c7.textContent
+
+    lines = [line1,line2,line3,line4,line5,line6,line7,line8]
+
+    lines.forEach(line=>{
+        if (line==='XXX'||line==='OOO'){
+            SomeoneWon=true
+            
+            if  (line==='OOO'){turn.textContent='You win!' }
+            if  (line==='XXX'){turn.textContent='You lose!'}
+            square.addEventListener('click',(e)=>location.reload())
+            SubTitle.textContent='Click to play again'; 
+        
+        }
+
+    }
+    );
+}
+
+function ProcessingComputerMove (){
+    
+    //Defending
+    const line1 =[c1,c2,c3]
+    const line2 =[c4,c5,c6]
+    const line3 = [c7,c8,c9]    
+    const line4 = [c1,c4,c7]
+    const line5 = [c2,c5,c8]
+    const line6 = [c3,c6,c9]
+    
+    const line7 =[c1,c5,c9]
+    const line8 =[c3,c5,c7]
+    
+    lines = [line1,line2,line3,line4,line5,line6,line7,line8]
+    let LineWithThreat;
+    lines.forEach(line=>{
+        const StringLine = line[0].textContent+line[1].textContent+line[2].textContent
+        if (StringLine==='OO'){
+            LineWithThreat=line
+            Threat=true
+        }
+    })
+    
+    lines.forEach(line=>{
+    const StringLine = line[0].textContent+line[1].textContent+line[2].textContent
+    if (StringLine==='XX'){
+        LineWithThreat=line
+        Threat=true
+        }})
+
+    return {
+
+    LineWithThreat
+    }
+}
+
+
+                                      //Finish of ProcessingComputerMove
+    
+
+//Draw
+function Draw () {
+    turn.textContent='Draw!'
+    SubTitle.textContent='Click to play again'
+    square.addEventListener('click',()=>{
+        location.reload()
+        })
+}
+
+                                        //Computer's move//
+function ComputerMove (BoxesList,ProcessingComputerMove)
+{
+    
+    Winner()
+    if (SomeoneWon){
+        return
+    }
+    
+    if (!SomeoneWon){
+        turn.textContent=CT
+        SubTitle.textContent = 'The computer is thinking...'
+        let AvailableBoxes = []
+        BoxesList.forEach((box)=>{
+            if (box.textContent===''){
+                AvailableBoxes.push(box)
+                }
+        })
+                
+        if (AvailableBoxes.length>0){
+             setTimeout(()=>{
+
+                 Threat=false
+                ThreatenedLine = ProcessingComputerMove().LineWithThreat
+
+                if (Threat===true){
+
+                    ThreatenedLine.forEach(box=>{
+                    if (box.textContent===''){
+                        box.textContent='X'
+                        turn.textContent=PT
+                        CJ=true
+                        PlayerMove(BoxesList)
+                    }
+                })
+                } 
+                else if (Threat===false){
+
+                    let SelectedNumber = Math.round((Math.random()*(AvailableBoxes.length-1)),0)
+                    SelectedBox = AvailableBoxes[SelectedNumber]
+
+                    SelectedBox.textContent='X'
+                    turn.textContent=PT
+                    CJ=true
+                    PlayerMove(BoxesList)
+                } 
+                if (SomeoneWon===false){
+
+                    if (AvailableBoxes.length>1){
+                    SubTitle.textContent='';
+                    
+                }}
+                else if (AvailableBoxes.length===1){ 
+                    Draw(); 
+                }
+            },1500)}
+        else if (AvailableBoxes.length===0){ 
+                    Draw(); 
+        }
+        return {}
+    } 
+}
+
+            
+
+                                 //Player's move
+function PlayerMove (BoxesList) {
+    Winner()
+    if(SomeoneWon){return}
+    if (!SomeoneWon){
+        let AvailableBoxes=[]
+        BoxesList.forEach((box)=>{
+            if (box.textContent===''){
+                AvailableBoxes.push(box)
+                }})
+
+        if (AvailableBoxes.length>0){
+            if (CJ===true){
+                turn.textContent=PT
+              
+                square.addEventListener('click',(e)=>{
+
+                    let turn = 'Finished'
+
+                const ClickedElement=e.target
+                let TC = ClickedElement.textContent 
+                if (CJ===true) {                                                                
+                    if (TC!==''){CJ=true}
+                else if (TC==='') {
+                    ClickedElement.textContent='O';
+                    turn.textContent=CT
+                    CJ=false     
+                   if (SomeoneWon===false) {SubTitle.textContent='';
+                    ComputerMove(BoxesList,ProcessingComputerMove)}
+                    return
+                }}})}}
+         
+        else if (AvailableBoxes.length===0){
+            Draw() }
+
+
+            return {
+
+            }
+
+        }
+
+}
+
+
+//End of the player's move
+
+
+
+
+
+
+//                                ----------------------
+//                               |  Game's beginning    |
+//                                ----------------------
+
+
+
+
+const Beginning = Math.round(((Math.random())),0)
+if (Beginning===0) {
+    turn.textContent=PT
+    CJ=true
+    PlayerMove(BoxesList)
+}
+else if (Beginning===1) {
+    turn.textContent=CT
+    CJ=false
+    ComputerMove(BoxesList,ProcessingComputerMove)
+}
+
+
+</script>
+</body>
+</html>

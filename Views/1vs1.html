@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<style>
+        body {
+            background: black;
+        }
+        #subtitle {
+            color: white;
+
+            
+        }
+        #square {
+            height: 516px; 
+            width:516px;
+            border: 3px white solid;
+            align-items: center;
+            padding: 0px;
+            justify-content: right;
+        }
+        .row {
+            color:white;
+            display: flex;
+        }
+        .box{
+            font-size: 140px;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            display: block;
+            height: 170px;
+            width: 170px;
+            border: 1px solid white;
+            color: black;
+            }
+        nav h1{
+            color: white;
+            padding: 10px;        
+        }
+        a {
+            color: wheat;
+            font-weight:bold;
+            text-decoration: none;
+            font-size: 20px;
+            margin:0 auto;
+            margin-left: 2em;
+            
+        }
+        nav {
+            border: 1px solid white;
+            justify-content: space-between;
+            padding: 0.4em;
+            background-color: #727272 ;
+            display: flex;
+            align-items:center;
+            display: flex;
+            list-style: none;
+        }
+        ul {
+            display: flex;
+        }
+        nav ul li {
+            list-style: none;
+        }   
+        .active {
+            border: 2px white solid;
+            border-radius: .5em;
+            padding: 5px;
+        }
+
+    </style>
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Document</title>
+
+</head>
+<body>
+    <nav>
+        <h1>1 vs 1</h1>
+        <ul>
+        <li><a  href="/">Jugar contra la PC</a></li>
+        <li><a class="active" href="/1vs1">1 vs 1</a></li></ul>
+    </nav>
+    
+ <h1 id="h1" style="color:white">X player starts</h1>
+<h1 id="subtitle">Click on any square to begin </h1>
+
+ <div id="square">
+<div class="row">
+<div class="box" id="c1"></div>
+<div class="box" id="c2"></div>
+<div class="box" id="c3"></div></div>
+
+
+<div class="row">
+<div class="box" id="c4"></div>
+<div class="box" id="c5"></div>
+<div class="box" id="c6"></div></div>
+
+<div class="row">
+<div class="box" id="c7"></div>
+<div class="box" id="c8"></div>
+<div class="box" id="c9"></div></div>
+
+<script>
+const c1= document.getElementById('c1')
+const c2= document.getElementById('c2')
+const c3= document.getElementById('c3')
+const c4= document.getElementById('c4')
+const c5= document.getElementById('c5')
+const c6= document.getElementById('c6')
+const c7= document.getElementById('c7')
+const c8= document.getElementById('c8')
+const c9= document.getElementById('c9')
+
+const Title = document.getElementById('h1')
+const SubTitle = document.getElementById('subtitle')
+
+const square = document.getElementById('square')
+let ClicksCounter = 0
+
+let lines = []
+
+const boxes = [c1,c2,c3,c4,c5,c6,c7,c8,c9]
+boxes.forEach(box=>{
+    box.setAttribute('style','color:white;')
+})
+let SomeoneWon = false
+
+
+                    //Clicks on the square
+
+square.addEventListener('click',(e)=>{
+    e.preventDefault()
+    Title.textContent=''
+    SubTitle.textContent=''
+    
+    ClicksCounter++
+    var turn = ClicksCounter%2
+
+    if (e.target.textContent){
+        ClicksCounter--
+        if (turn===0) {
+            SubTitle.textContent='O player turn'   
+        
+        
+     }
+        else if (turn===1){
+            SubTitle.textContent='X player turn'   
+
+     }
+    }
+
+    else  {
+
+
+
+        if (turn===0) {
+            SubTitle.textContent='X player turn'   
+            e.target.textContent='O'
+
+        }
+        else if (turn===1){
+            SubTitle.textContent='O player turn'   
+            e.target.textContent='X'
+        }
+
+
+
+        const line1 =c1.textContent+c2.textContent+c3.textContent
+        const line2 =c4.textContent+c5.textContent+c6.textContent
+        const line3 =c7.textContent+c8.textContent+c9.textContent
+
+        const line4 =c1.textContent+c4.textContent+c7.textContent
+        const line5 =c2.textContent+c5.textContent+c8.textContent
+        const line6 =c3.textContent+c6.textContent+c9.textContent
+
+        const line7 =c1.textContent+c5.textContent+c9.textContent
+        const line8 =c3.textContent+c5.textContent+c7.textContent
+
+        lines = [line1,line2,line3,line4,line5,line6,line7,line8]
+
+        //Victory 
+
+        let WinnerLine=''
+        lines.forEach((e)=>{                                  
+            if (e==='XXX'||e==='OOO'){
+            WinnerLine=e
+            SomeoneWon=true
+            }
+            
+            if (SomeoneWon){
+                Title.textContent=`${WinnerLine[0]} player won!`
+                SubTitle.textContent='Click to play again'
+                square.addEventListener(('click'),()=>{
+                location.reload()
+                })
+            }
+            else{
+
+
+                //DRAW
+
+                let FilledBoxes = 0
+                boxes.forEach((c)=>{       
+                    const T = c.textContent
+                    if (T!=='') { FilledBoxes++}
+                })
+                if (FilledBoxes===9) {
+                    Title.textContent='Draw!'
+                    SubTitle.textContent='Click to play again'  
+
+                    square.addEventListener('click',()=>{
+                        location.reload()
+                    })
+
+                }
+                
+
+            }
+        })
+    }
+
+
+})
+
+
+
+</script>
+</body>
+</html>
